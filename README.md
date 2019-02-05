@@ -1,2 +1,2 @@
 # quoteBox
-A plugin for text highlighting with comment box
+A medium like plugin  for text highlighting with comment box 
