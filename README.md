@@ -1,7 +1,6 @@
 # quoteBox
 A medium like plugin  for text highlighting with comment box 
 ## Documentation
-## Documentation
 A medium like plugin  for text highlighting with comment box 
 ### Initialization Steps
 1. Select a body tag where text highlight should occur e.g #demo
