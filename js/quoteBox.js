@@ -21,10 +21,10 @@
         var tooltip          = $(settings.highlightMenu);
         var quoteResponse    = $(settings.responseDiv);
         var responseLink     = $(settings.responseLink);
-		var parentBlockNode, initialContent, contentHighlight, highlightRange, commonAncestorContainer, childNodes, marker, fragment;
+		var parentBlockNode, contentHighlight, highlightRange, commonAncestorContainer, childNodes, marker, fragment;
 		var range,	rangeDimension;
-        //save original markup state eith the following variables
-        var initialTitle, initialBody;
+        //save original markup state with the following variables
+        var initialDocument, initialTitle, initialBody, initialContent;
        
         this.on('mouseup',function(){
 
@@ -52,10 +52,12 @@
 		        $(parentBlockNode).attr('id',tagId);
 		    }
         	//save original markup
-        	var mainBodyContent  = $(parentBlockNode).closest(settings.mainClass);
+        	var mainBodyContent  = $(parentBlockNode).closest(settings.mainClass); 
         	if (settings.documentPartition) {
-	        	initialTitle         = mainBodyContent.find(settings.titleClass);
-	        	initialBody          = mainBodyContent.find(settings.bodyClass);
+	        	initialTitle         = mainBodyContent.find(settings.titleClass).html();
+	        	initialBody          = mainBodyContent.find(settings.bodyClass).html();
+        	}else{
+        		initialDocument      = mainBodyContent.html();
         	}
         	//set tooltip position
         	range  = highlightRange.getBoundingClientRect();
@@ -96,19 +98,20 @@
 		    parentNode.data('dev-comment-count',devCommentCount); 
 		    //sop section that houses the parent element
 		    var mainBodyContent  = $(parentNode).closest(settings.mainClass);
+		    	var mainContent  = settings.keepOriginal ? initialDocument : mainBodyContent.html();
 		    if(settings.documentPartition){
-			    var sectionTitle    = settings.keepOriginal ? initialTitle : mainBodyContent.find(settings.titleClass);
-			    var sectionContent  = settings.keepOriginal ? initialBody  : mainBodyContent.find(settings.bodyClass);		    	
+			    var sectionTitle    = settings.keepOriginal ? initialTitle : mainBodyContent.find(settings.titleClass).html();
+			    var sectionContent  = settings.keepOriginal ? initialBody  : mainBodyContent.find(settings.bodyClass).html();	    	
 		    }
 		    //set response content 
 		    $('#tag-id').val(parentNode.prop('id'));
 		    $('#quoted-text').val(quotedText.html());
 		    if(settings.documentPartition){
 			    $('#section-tag').val(mainBodyContent.data('sectionTag'));//needed to identify multiple document partitions
-			    $('#section-title').val(sectionTitle.html());
-			    $('#section-body').val(sectionContent.html());		    	
+			    $('#section-title').val(sectionTitle);
+			    $('#section-body').val(sectionContent);		    	
 		    }else{
-		    	$('#section-body').val(mainBodyContent.html());
+		    	$('#section-body').val(mainContent);
 		    }
 		    //display reply div
 	        quoteResponse.css({
